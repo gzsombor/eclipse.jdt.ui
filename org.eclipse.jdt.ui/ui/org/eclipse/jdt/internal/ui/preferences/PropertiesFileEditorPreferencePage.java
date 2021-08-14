@@ -360,7 +360,7 @@ public class PropertiesFileEditorPreferencePage extends PreferencePage implement
 
 	}
 
-	private OverlayPreferenceStore.OverlayKey[] createOverlayStoreKeys() {
+	private List<OverlayPreferenceStore.OverlayKey> createOverlayStoreKeys() {
 
 		ArrayList<OverlayKey> overlayKeys= new ArrayList<>();
 
@@ -373,9 +373,7 @@ public class PropertiesFileEditorPreferencePage extends PreferencePage implement
 			overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, colorKey + UNDERLINE));
 		}
 
-		OverlayPreferenceStore.OverlayKey[] keys= new OverlayPreferenceStore.OverlayKey[overlayKeys.size()];
-		overlayKeys.toArray(keys);
-		return keys;
+		return overlayKeys;
 	}
 
 	/*
