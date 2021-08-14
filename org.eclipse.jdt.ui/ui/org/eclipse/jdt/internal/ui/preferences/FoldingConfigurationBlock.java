@@ -15,6 +15,7 @@ package org.eclipse.jdt.internal.ui.preferences;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -138,16 +139,14 @@ class FoldingConfigurationBlock implements IPreferenceConfigurationBlock {
 		return map;
 	}
 
-	private OverlayPreferenceStore.OverlayKey[] createOverlayStoreKeys() {
+	private List<OverlayPreferenceStore.OverlayKey> createOverlayStoreKeys() {
 
 		ArrayList<OverlayKey> overlayKeys= new ArrayList<>();
 
 		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_FOLDING_ENABLED));
 		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, PreferenceConstants.EDITOR_FOLDING_PROVIDER));
 
-		OverlayPreferenceStore.OverlayKey[] keys= new OverlayPreferenceStore.OverlayKey[overlayKeys.size()];
-		overlayKeys.toArray(keys);
-		return keys;
+		return overlayKeys;
 	}
 
 	/**
