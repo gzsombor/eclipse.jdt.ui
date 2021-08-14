@@ -371,7 +371,7 @@ class JavaEditorColoringConfigurationBlock extends AbstractConfigurationBlock {
 		store.addKeys(createOverlayStoreKeys());
 	}
 
-	private OverlayPreferenceStore.OverlayKey[] createOverlayStoreKeys() {
+	private ArrayList<OverlayKey> createOverlayStoreKeys() {
 
 		ArrayList<OverlayKey> overlayKeys= new ArrayList<>();
 
@@ -385,10 +385,7 @@ class JavaEditorColoringConfigurationBlock extends AbstractConfigurationBlock {
 			if (item instanceof SemanticHighlightingColorListItem)
 				overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, ((SemanticHighlightingColorListItem) item).getEnableKey()));
 		}
-
-		OverlayPreferenceStore.OverlayKey[] keys= new OverlayPreferenceStore.OverlayKey[overlayKeys.size()];
-		overlayKeys.toArray(keys);
-		return keys;
+		return overlayKeys;
 	}
 
 	/**

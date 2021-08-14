@@ -87,7 +87,7 @@ class MarkOccurrencesConfigurationBlock implements IPreferenceConfigurationBlock
 		fStore.addKeys(createOverlayStoreKeys());
 	}
 
-	private OverlayPreferenceStore.OverlayKey[] createOverlayStoreKeys() {
+	private ArrayList<OverlayKey> createOverlayStoreKeys() {
 
 		ArrayList<OverlayKey> overlayKeys= new ArrayList<>();
 
@@ -103,9 +103,7 @@ class MarkOccurrencesConfigurationBlock implements IPreferenceConfigurationBlock
 		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_MARK_BREAK_CONTINUE_TARGETS));
 		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_STICKY_OCCURRENCES));
 
-		OverlayPreferenceStore.OverlayKey[] keys= new OverlayPreferenceStore.OverlayKey[overlayKeys.size()];
-		overlayKeys.toArray(keys);
-		return keys;
+		return overlayKeys;
 	}
 
 	/**

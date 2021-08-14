@@ -87,7 +87,7 @@ class JavaEditorAppearanceConfigurationBlock extends AbstractConfigurationBlock 
 	}
 
 
-	private OverlayPreferenceStore.OverlayKey[] createOverlayStoreKeys() {
+	private ArrayList<OverlayKey> createOverlayStoreKeys() {
 
 		ArrayList<OverlayKey> overlayKeys= new ArrayList<>();
 
@@ -106,9 +106,7 @@ class JavaEditorAppearanceConfigurationBlock extends AbstractConfigurationBlock 
 		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, PreferenceConstants.EDITOR_SOURCE_HOVER_BACKGROUND_COLOR));
 		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_SOURCE_HOVER_BACKGROUND_COLOR_SYSTEM_DEFAULT));
 
-		OverlayPreferenceStore.OverlayKey[] keys= new OverlayPreferenceStore.OverlayKey[overlayKeys.size()];
-		overlayKeys.toArray(keys);
-		return keys;
+		return overlayKeys;
 	}
 
 	/**
