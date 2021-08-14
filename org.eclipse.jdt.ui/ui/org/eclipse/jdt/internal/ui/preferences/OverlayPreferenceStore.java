@@ -509,24 +509,26 @@ public class OverlayPreferenceStore  implements IPreferenceStore {
 	 * Note: This method must be called before {@link #load()} is called.
 	 * </p>
 	 *
-	 * @since 3.0
+	 * @param keys
+	 * @since 3.24
 	 */
-	public void addKeys(OverlayKey[] keys) {
+	public void addKeys(List<OverlayKey> keys) {
 		Assert.isTrue(!fLoaded);
 		Assert.isNotNull(keys);
 
 		int overlayKeysLength= fOverlayKeys.length;
-		OverlayKey[] result= new OverlayKey[keys.length + overlayKeysLength];
+		OverlayKey[] result= new OverlayKey[keys.size() + overlayKeysLength];
 
 		for (int i= 0, length= overlayKeysLength; i < length; i++)
 			result[i]= fOverlayKeys[i];
 
-		for (int i= 0, length= keys.length; i < length; i++)
-			result[overlayKeysLength + i]= keys[i];
+		for (int i= 0, length= keys.size(); i < length; i++)
+			result[overlayKeysLength + i]= keys.get(i);
 
 		fOverlayKeys= result;
 
 		if (fLoaded)
 			load();
 	}
+
 }
