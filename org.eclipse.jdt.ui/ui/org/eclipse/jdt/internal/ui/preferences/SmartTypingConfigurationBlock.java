@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.jdt.internal.ui.preferences;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -45,6 +47,7 @@ import org.eclipse.jdt.internal.corext.util.Messages;
 import org.eclipse.jdt.ui.PreferenceConstants;
 
 import org.eclipse.jdt.internal.ui.JavaPlugin;
+import org.eclipse.jdt.internal.ui.preferences.OverlayPreferenceStore.OverlayKey;
 
 
 /**
@@ -60,9 +63,9 @@ class SmartTypingConfigurationBlock extends AbstractConfigurationBlock {
 		store.addKeys(createOverlayStoreKeys());
 	}
 
-	private OverlayPreferenceStore.OverlayKey[] createOverlayStoreKeys() {
+	private List<OverlayKey> createOverlayStoreKeys() {
 
-		return new OverlayPreferenceStore.OverlayKey[] {
+		return List.of(
 				new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_SMART_PASTE),
 				new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_IMPORTS_ON_PASTE),
 
@@ -78,8 +81,8 @@ class SmartTypingConfigurationBlock extends AbstractConfigurationBlock {
 				new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_SMART_SEMICOLON),
 				new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_SMART_TAB),
 				new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_SMART_OPENING_BRACE),
-				new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_SMART_INDENT_AFTER_NEWLINE),
-		};
+				new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_SMART_INDENT_AFTER_NEWLINE)
+		);
 	}
 
 	/**
