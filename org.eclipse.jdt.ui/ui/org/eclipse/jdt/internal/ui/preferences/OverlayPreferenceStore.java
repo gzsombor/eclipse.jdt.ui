@@ -14,6 +14,8 @@
 
 package org.eclipse.jdt.internal.ui.preferences;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.Assert;
 
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -77,6 +79,10 @@ public class OverlayPreferenceStore  implements IPreferenceStore {
 		fParent= parent;
 		fOverlayKeys= overlayKeys;
 		fStore= new PreferenceStore();
+	}
+
+	public OverlayPreferenceStore(IPreferenceStore parent, List<OverlayKey> overlayKeys) {
+		this(parent, overlayKeys.toArray(new OverlayPreferenceStore.OverlayKey[overlayKeys.size()]));
 	}
 
 	private OverlayKey findOverlayKey(String key) {
