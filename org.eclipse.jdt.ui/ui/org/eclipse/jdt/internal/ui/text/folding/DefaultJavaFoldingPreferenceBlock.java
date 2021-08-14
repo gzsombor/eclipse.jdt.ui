@@ -49,7 +49,6 @@ public class DefaultJavaFoldingPreferenceBlock implements IJavaFoldingPreference
 
 	private IPreferenceStore fStore;
 	private OverlayPreferenceStore fOverlayStore;
-	private OverlayKey[] fKeys;
 	private Map<Button, String> fCheckBoxes= new HashMap<>();
 	private SelectionListener fCheckBoxListener= new SelectionListener() {
 		@Override
@@ -71,11 +70,10 @@ public class DefaultJavaFoldingPreferenceBlock implements IJavaFoldingPreference
 
 	public DefaultJavaFoldingPreferenceBlock() {
 		fStore= JavaPlugin.getDefault().getPreferenceStore();
-		fKeys= createKeys();
-		fOverlayStore= new OverlayPreferenceStore(fStore, fKeys);
+		fOverlayStore= new OverlayPreferenceStore(fStore, createKeys());
 	}
 
-	private OverlayKey[] createKeys() {
+	private ArrayList<OverlayKey> createKeys() {
 		ArrayList<OverlayKey> overlayKeys= new ArrayList<>();
 
 		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_FOLDING_JAVADOC));
@@ -88,7 +86,7 @@ public class DefaultJavaFoldingPreferenceBlock implements IJavaFoldingPreference
 		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.BOOLEAN, PreferenceConstants.EDITOR_FOLDING_CUSTOM_REGIONS_ENABLED));
 		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, PreferenceConstants.EDITOR_FOLDING_CUSTOM_REGION_START));
 		overlayKeys.add(new OverlayPreferenceStore.OverlayKey(OverlayPreferenceStore.STRING, PreferenceConstants.EDITOR_FOLDING_CUSTOM_REGION_END));
-		return overlayKeys.toArray(new OverlayKey[overlayKeys.size()]);
+		return overlayKeys;
 	}
 
 	/*
