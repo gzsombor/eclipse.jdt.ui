@@ -229,6 +229,10 @@ public class AbstractTestRunSessionSerializationTests {
 		}
 	}
 
+	public static String getContents(File file) throws IOException {
+		return Files.readString(file.toPath());
+	}
+
 	protected void runCUTest(String test) throws CoreException, IOException, FileNotFoundException, Exception {
 		IPackageFragmentRoot root= JUnitWorkspaceTestSetup.getRoot();
 		IPackageFragment pack= root.getPackageFragment("pack");
@@ -237,7 +241,7 @@ public class AbstractTestRunSessionSerializationTests {
 
 		Path expectedPath= new Path(JUnitWorkspaceTestSetup.getProjectPath() + "xml/" + test + ".xml");
 		File expectedFile= JavaTestPlugin.getDefault().getFileInPlugin(expectedPath);
-		String expected=  Files.readString(expectedFile.toPath());
+		String expected= getContents(expectedFile);
 		runExportImport(aTestCase, expected);
 
 		runImportAntResult(test);
@@ -258,7 +262,7 @@ public class AbstractTestRunSessionSerializationTests {
 
 		Path expectedPath= new Path(JUnitWorkspaceTestSetup.getProjectPath() + "xml/" + testType + "_" + method + ".xml");
 		File expectedFile= JavaTestPlugin.getDefault().getFileInPlugin(expectedPath);
-		String expected= Files.readString(expectedFile.toPath());
+		String expected= getContents(expectedFile);
 		runExportImport(testMethod, expected);
 
 		//ant cannot run single test methods
