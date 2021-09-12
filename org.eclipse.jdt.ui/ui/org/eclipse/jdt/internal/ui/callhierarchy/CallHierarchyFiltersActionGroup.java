@@ -21,9 +21,15 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.preference.BooleanPropertyAction;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionGroup;
+
+import org.eclipse.jdt.internal.corext.callhierarchy.CallHierarchyCore;
+
+import org.eclipse.jdt.internal.ui.JavaPlugin;
 
 /**
  * Action group to add the filter actions to a view part's toolbar
@@ -68,6 +74,10 @@ public class CallHierarchyFiltersActionGroup extends ActionGroup {
         viewMenu.add(new Separator("filters")); //$NON-NLS-1$
         viewMenu.add(new ShowCallHierarchyFilterDialogAction(fPart, null));
         viewMenu.add(new ShowExpandWithConstructorsDialogAction());
+
+        IPreferenceStore settings = JavaPlugin.getDefault().getPreferenceStore();
+
+        viewMenu.add(new BooleanPropertyAction(CallHierarchyMessages.FiltersDialog_filterTestCode, settings, CallHierarchyCore.PREF_HIDE_TEST_CODE));
     }
 
     @Override
