@@ -233,7 +233,7 @@ public class CallHierarchyUI {
     public static CallHierarchyViewPart openView(IMember[] input, IWorkbenchWindow window) {
     	if (input.length == 0) {
 			MessageDialog.openInformation(window.getShell(), CallHierarchyMessages.CallHierarchyUI_selectionDialog_title,
-					CallHierarchyMessages.CallHierarchyUI_open_operation_unavialable);
+					CallHierarchyMessages.CallHierarchyUI_open_operation_unavailable);
 			return null;
 		}
         IWorkbenchPage page= window.getActivePage();
