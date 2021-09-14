@@ -90,8 +90,7 @@ public abstract class MethodWrapper extends PlatformObject {
         MethodWrapper[] result = new MethodWrapper[fElements.size()];
         int i = 0;
 
-        for (String string : fElements.keySet()) {
-            MethodCall methodCall = getMethodCallFromMap(fElements, string);
+        for (MethodCall methodCall : fElements.values()) {
             result[i++] = createMethodWrapper(methodCall);
         }
 
@@ -264,16 +263,11 @@ public abstract class MethodWrapper extends PlatformObject {
     private void performSearch(IProgressMonitor progressMonitor) {
         fElements = findChildren(progressMonitor);
 
-        for (String string : fElements.keySet()) {
+        for (MethodCall methodCall : fElements.values()) {
             checkCanceled(progressMonitor);
 
-            MethodCall methodCall = getMethodCallFromMap(fElements, string);
             addCallToCache(methodCall);
         }
-    }
-
-    private MethodCall getMethodCallFromMap(Map<String, MethodCall> elements, String key) {
-        return elements.get(key);
     }
 
     private void initCacheForMethod() {
