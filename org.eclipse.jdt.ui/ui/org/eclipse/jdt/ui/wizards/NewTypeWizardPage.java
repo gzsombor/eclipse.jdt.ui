@@ -344,7 +344,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 	/** Field ID of the modifier check boxes. */
 	protected final static String MODIFIERS= PAGE_NAME + ".modifiers"; //$NON-NLS-1$
 	/** Field ID of the modifier check boxes.
-	 * @since 3.25*/
+	 * @since 3.26*/
 	protected final static String SEALEDMODIFIERS= PAGE_NAME + ".sealedmodifiers"; //$NON-NLS-1$
 	/** Field ID of the method stubs check boxes. */
 	protected final static String METHODS= PAGE_NAME + ".methods"; //$NON-NLS-1$
@@ -459,17 +459,17 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 	protected IStatus fSuperInterfacesStatus;
 
 	/**
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	protected IStatus fSealedModifierStatus;
 
 	/**
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	protected IStatus fSealedSuperClassStatus;
 
 	/**
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	protected IStatus fSealedSuperInterfacesStatus;
 
@@ -1667,7 +1667,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 	 * @param type the binding of superclass
 	 * @param canBeModified if <code>true</code> the superclass name field is editable;
 	 * otherwise it is read-only.
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	public void setSuperClass(ITypeBinding type, boolean canBeModified) {
 		fSuperClass= null;
@@ -1722,7 +1722,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 	 * the list's elements are of type <code>ITypeBinding</code>
 	 * @param canBeModified if <code>true</code> the super interface field is
 	 * editable; otherwise it is read-only.
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	public void setSuperInterfacesList(List<ITypeBinding> interfaceBindings, boolean canBeModified) {
 		ArrayList<InterfaceWrapper> interfaces= new ArrayList<>(interfaceBindings.size());
@@ -1757,7 +1757,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 	 * @param type IType java element of the interface.
 	 * @return returns <code>true</code>if the interfaces has been added, <code>false</code>
 	 * if the interface already is in the list.
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	public boolean addSuperInterface(String superInterface, IType type) {
 		return fSuperInterfacesDialogField.addElement(new InterfaceWrapper(superInterface, type));
@@ -2369,7 +2369,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 
 	/**
 	 * @return returns if any of the super types is sealed or not
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	protected boolean isSuperTypeSealed() {
 		boolean isSealed= false;
@@ -2499,7 +2499,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 	 * </p>
 	 *
 	 * @return the status of the validation
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	protected IStatus validateSealedSuperInterfacesStatus() {
 		StatusInfo status= new StatusInfo();
@@ -3294,7 +3294,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 	 * @param imports an import manager to add all needed import statements
 	 * @return the created method.
 	 * @throws CoreException thrown when the creation fails.
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	protected IMethod createMainMethod(IType type, ImportsManager imports) throws CoreException{
 		if (type != null ) {
@@ -3514,7 +3514,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 
 	/**
 	 * @return the error status based on super class
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	public IStatus getSuperClassStatus() {
 		return this.fSuperClassStatus;
@@ -3522,7 +3522,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 
 	/**
 	 * @return the error status based on super interface
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	public IStatus getSuperInterfaceStatus() {
 		return this.fSuperInterfacesStatus;
@@ -3530,7 +3530,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 
 	/**
 	 * @return the error status based on super class
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	public IStatus getSealedSuperClassStatus() {
 		return this.fSealedSuperClassStatus;
@@ -3538,7 +3538,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 
 	/**
 	 * @return the error status based on super interface
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	public IStatus getSealedSuperInterfaceStatus() {
 		return this.fSealedSuperInterfacesStatus;
@@ -3546,7 +3546,7 @@ public abstract class NewTypeWizardPage extends NewContainerWizardPage {
 
 	/**
 	 * @return the error status based on super type
-	 * @since 3.25
+	 * @since 3.26
 	 */
 	public IStatus getSealedModifierStatus() {
 		return this.fSealedModifierStatus;
