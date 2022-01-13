@@ -36,11 +36,11 @@ import org.eclipse.jdt.internal.junit.runner.RemoteTestRunner;
 import org.eclipse.jdt.internal.junit.runner.TestIdMap;
 import org.eclipse.jdt.internal.junit.runner.TestReferenceFailure;
 
-public class JUnit5TestListener implements TestExecutionListener {
+public final class JUnit5TestListener implements TestExecutionListener {
 
 	private final IListensToTestExecutions fNotified;
 
-	private RemoteTestRunner fRemoteTestRunner;
+	private final RemoteTestRunner fRemoteTestRunner;
 
 	private TestPlan fTestPlan;
 

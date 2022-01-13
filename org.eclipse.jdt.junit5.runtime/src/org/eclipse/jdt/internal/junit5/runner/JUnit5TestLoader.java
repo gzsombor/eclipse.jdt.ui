@@ -30,11 +30,11 @@ import org.eclipse.jdt.internal.junit.runner.ITestLoader;
 import org.eclipse.jdt.internal.junit.runner.ITestReference;
 import org.eclipse.jdt.internal.junit.runner.RemoteTestRunner;
 
-public class JUnit5TestLoader implements ITestLoader {
+public final class JUnit5TestLoader implements ITestLoader {
 
 	public final static String FAILURE_NAMES= "org.eclipse.jdt.junit5.runtime.failureNames"; //$NON-NLS-1$
 
-	private Launcher fLauncher= LauncherFactory.create();
+	private final Launcher fLauncher= LauncherFactory.create();
 
 	private RemoteTestRunner fRemoteTestRunner;
 
