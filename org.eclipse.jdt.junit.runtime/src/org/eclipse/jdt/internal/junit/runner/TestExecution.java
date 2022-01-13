@@ -18,14 +18,14 @@ package org.eclipse.jdt.internal.junit.runner;
 
 import java.util.ArrayList;
 
-public class TestExecution {
+public final class TestExecution {
 	private boolean fShouldStop = false;
 
-	private IListensToTestExecutions fExecutionListener;
+	private final IListensToTestExecutions fExecutionListener;
 
-	private IClassifiesThrowables fClassifier;
+	private final IClassifiesThrowables fClassifier;
 
-	private ArrayList<IStopListener> fStopListeners = new ArrayList<>();
+	private final ArrayList<IStopListener> fStopListeners = new ArrayList<>();
 
 	public TestExecution(IListensToTestExecutions listener,
 			IClassifiesThrowables classifier) {
