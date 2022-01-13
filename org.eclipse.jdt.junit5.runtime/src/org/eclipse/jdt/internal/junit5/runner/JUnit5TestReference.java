@@ -30,15 +30,15 @@ import org.eclipse.jdt.internal.junit.runner.RemoteTestRunner;
 import org.eclipse.jdt.internal.junit.runner.TestExecution;
 import org.eclipse.jdt.internal.junit.runner.TestIdMap;
 
-public class JUnit5TestReference implements ITestReference {
+public final class JUnit5TestReference implements ITestReference {
 
-	private LauncherDiscoveryRequest fRequest;
+	private final LauncherDiscoveryRequest fRequest;
 
-	private Launcher fLauncher;
+	private final Launcher fLauncher;
 
-	private TestPlan fTestPlan;
+	private final TestPlan fTestPlan;
 
-	private RemoteTestRunner fRemoteTestRunner;
+	private final RemoteTestRunner fRemoteTestRunner;
 
 	public JUnit5TestReference(LauncherDiscoveryRequest request, Launcher launcher, RemoteTestRunner remoteTestRunner) {
 		fRequest= request;
