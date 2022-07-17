@@ -176,24 +176,6 @@ abstract class JavaBrowsingPart extends ViewPart implements IMenuListener, IView
 
 	private IPartListener2 fPartListener= new IPartListener2() {
 		@Override
-		public void partActivated(IWorkbenchPartReference ref) {
-		}
-		@Override
-		public void partBroughtToTop(IWorkbenchPartReference ref) {
-		}
-	 	@Override
-		public void partInputChanged(IWorkbenchPartReference ref) {
-	 	}
-		@Override
-		public void partClosed(IWorkbenchPartReference ref) {
-		}
-		@Override
-		public void partDeactivated(IWorkbenchPartReference ref) {
-		}
-		@Override
-		public void partOpened(IWorkbenchPartReference ref) {
-		}
-		@Override
 		public void partVisible(IWorkbenchPartReference ref) {
 			if (ref != null && ref.getId() == getSite().getId()){
 				fProcessSelectionEvents= true;
