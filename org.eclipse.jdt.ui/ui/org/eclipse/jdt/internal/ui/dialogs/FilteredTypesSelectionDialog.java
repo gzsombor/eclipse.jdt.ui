@@ -104,6 +104,7 @@ import org.eclipse.jdt.launching.LibraryLocation;
 
 import org.eclipse.jdt.ui.JavaElementLabels;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jdt.ui.ProblemsLabelDecorator;
 import org.eclipse.jdt.ui.dialogs.ITypeInfoFilterExtension;
 import org.eclipse.jdt.ui.dialogs.ITypeInfoImageProvider;
 import org.eclipse.jdt.ui.dialogs.ITypeSelectionComponent;
@@ -245,7 +246,7 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 
 		fTypeInfoUtil= new TypeInfoUtil(extension != null ? extension.getImageProvider() : null);
 
-		fTypeInfoLabelProvider= new TypeItemLabelProvider();
+		fTypeInfoLabelProvider= new TypeItemLabelProvider(new ProblemsLabelDecorator(null));
 
 		setListLabelProvider(fTypeInfoLabelProvider);
 		setListSelectionLabelDecorator(fTypeInfoLabelProvider);
@@ -650,8 +651,11 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 
 		private Styler fBoldQualifierStyler;
 
-		public TypeItemLabelProvider() {
+		private final ILabelDecorator labelDecorator;
+
+		public TypeItemLabelProvider(ILabelDecorator labelDecorator) {
 			fImageManager= new LocalResourceManager(JFaceResources.getResources());
+			this.labelDecorator = labelDecorator;
 		}
 
 		/*
@@ -669,6 +673,17 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 
 		@Override
 		public Image getImage(Object element) {
+			final var internal = getImageInternal(element);
+			if (element instanceof TypeNameMatch) {
+				if (labelDecorator != null) {
+					final var type = ((TypeNameMatch) element).getType();
+					return labelDecorator.decorateImage(internal, type);
+				}
+			}
+			return internal;
+		}
+
+		private Image getImageInternal(Object element) {
 			if (!(element instanceof TypeNameMatch)) {
 				return super.getImage(element);
 			}
