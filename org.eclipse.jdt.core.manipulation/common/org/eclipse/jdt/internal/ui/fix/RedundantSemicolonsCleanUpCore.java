@@ -131,6 +131,9 @@ public class RedundantSemicolonsCleanUpCore extends AbstractMultiFix implements 
 		ICompilationUnit compilationUnit = (ICompilationUnit)unit.getJavaElement();
 		IBuffer buffer= compilationUnit.getBuffer();
 		String contents= buffer.getContents();
+		if (contents == null) {
+			return null;
+		}
 
 		String label= MultiFixMessages.RedundantSemicolonsCleanup_description;
 		ArrayList<TextEditGroup> textedits= new ArrayList<>();
