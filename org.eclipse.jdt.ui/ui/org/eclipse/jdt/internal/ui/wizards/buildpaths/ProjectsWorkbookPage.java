@@ -649,8 +649,12 @@ public class ProjectsWorkbookPage extends BuildPathBasePage {
 			Object[] selectArr= getNotYetRequiredProjects();
 			new JavaElementComparator().sort(null, selectArr);
 
-			ListSelectionDialog dialog= ListSelectionDialog.of(Arrays.asList(selectArr)).contentProvider(ArrayContentProvider.getInstance()).labelProvider(new JavaUILabelProvider()).message(NewWizardMessages.ProjectsWorkbookPage_chooseProjects_message).create(getShell());
-			dialog.setTitle(NewWizardMessages.ProjectsWorkbookPage_chooseProjects_title);
+			ListSelectionDialog dialog= ListSelectionDialog.of(Arrays.asList(selectArr))
+					.contentProvider(ArrayContentProvider.getInstance())
+					.labelProvider(new JavaUILabelProvider())
+					.message(NewWizardMessages.ProjectsWorkbookPage_chooseProjects_message)
+					.title(NewWizardMessages.ProjectsWorkbookPage_chooseProjects_title)
+					.create(getShell());
 			dialog.setHelpAvailable(false);
 			if (dialog.open() == Window.OK) {
 				Object[] result= dialog.getResult();
