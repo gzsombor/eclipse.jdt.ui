@@ -371,10 +371,9 @@ public class ClasspathModifierQueries {
 
             @Override
 			public boolean doQuery(final boolean editingOutputFolder,  final OutputFolderValidator validator, final IJavaProject project) throws JavaModelException {
-                final boolean[] result= { false };
                 fRemoveProject= false;
                 fOutputLocation= project.getOutputLocation();
-				Display.getDefault().syncExec(() -> {
+				return Display.getDefault().syncCall(() -> {
 					Shell sh= shell != null ? shell : JavaPlugin.getActiveWorkbenchShell();
 
 					String title= NewWizardMessages.ClasspathModifier_ChangeOutputLocationDialog_title;
@@ -387,25 +386,24 @@ public class ClasspathModifierQueries {
 						fRemoveProject= true;
 						if (MessageDialog.openConfirm(sh, title, message1)) {
 							fOutputLocation= newOutputFolder1;
-							result[0]= true;
+							return true;
 						}
 					} else {
 						IPath newOutputFolder2= fDesiredOutputLocation;
 						newOutputFolder2= getValidPath(newOutputFolder2, validator);
 						if (editingOutputFolder) {
 							fOutputLocation= newOutputFolder2;
-							result[0]= true;
-							return; // show no dialog
+							return true; // show no dialog
 						}
 						String message2= NewWizardMessages.ClasspathModifier_ChangeOutputLocationDialog_project_message;
 						fRemoveProject= true;
 						if (MessageDialog.openQuestion(sh, title, message2)) {
 							fOutputLocation= newOutputFolder2;
-							result[0]= true;
+							return true;
 						}
 					}
+					return false;
 				});
-                return result[0];
             }
 
             @Override
@@ -448,15 +446,14 @@ public class ClasspathModifierQueries {
 
 			@Override
 			public boolean doQuery(final CPListElement element, final boolean focusOnExcluded) {
-				final boolean[] result= { false };
-				Display.getDefault().syncExec(() -> {
+				return Display.getDefault().syncCall(() -> {
 					Shell sh= shell != null ? shell : JavaPlugin.getActiveWorkbenchShell();
 					ExclusionInclusionDialog dialog= new ExclusionInclusionDialog(sh, element, focusOnExcluded);
-					result[0]= dialog.open() == Window.OK;
+					boolean result = dialog.open() == Window.OK;
 					fInclusionPattern= dialog.getInclusionPattern();
 					fExclusionPattern= dialog.getExclusionPattern();
+					return result;
 				});
-				return result[0];
 			}
 
 			@Override
@@ -483,14 +480,13 @@ public class ClasspathModifierQueries {
      */
     public static IAddArchivesQuery getDefaultArchivesQuery(final Shell shell) {
         return () -> {
-		    final IPath[][] selected= {null};
-		    Display.getDefault().syncExec(() -> {
+		    final IPath[] selected = Display.getDefault().syncCall(() -> {
 			    Shell sh= shell != null ? shell : JavaPlugin.getActiveWorkbenchShell();
-			    selected[0]= BuildPathDialogAccess.chooseExternalJAREntries(sh);
+			    return BuildPathDialogAccess.chooseExternalJAREntries(sh);
 			});
-		    if(selected[0] == null)
+		    if(selected == null)
 		        return new IPath[0];
-		    return selected[0];
+		    return selected;
 		};
     }
 
@@ -504,16 +500,15 @@ public class ClasspathModifierQueries {
 	 */
 	public static IRemoveLinkedFolderQuery getDefaultRemoveLinkedFolderQuery(final Shell shell) {
 		return folder -> {
-			final int[] result= { IRemoveLinkedFolderQuery.REMOVE_BUILD_PATH};
-			Display.getDefault().syncExec(() -> {
+			return Display.getDefault().syncCall(() -> {
 				final RemoveLinkedFolderDialog dialog= new RemoveLinkedFolderDialog((shell != null ? shell : JavaPlugin.getActiveWorkbenchShell()), folder);
 				final int status= dialog.open();
-				if (status == 0)
-					result[0]= dialog.getRemoveStatus();
-				else
-					result[0]= IRemoveLinkedFolderQuery.REMOVE_CANCEL;
+				if (status == 0) {
+					return dialog.getRemoveStatus();
+				} else {
+					return IRemoveLinkedFolderQuery.REMOVE_CANCEL;
+				}
 			});
-			return result[0];
 		};
 	}
 
@@ -529,14 +524,14 @@ public class ClasspathModifierQueries {
      */
     public static IAddLibrariesQuery getDefaultLibrariesQuery(final Shell shell) {
         return (project, entries) -> {
-		    final IClasspathEntry[][] selected= {null};
-		    Display.getDefault().syncExec(() -> {
+		    final IClasspathEntry[] selected= Display.getDefault().syncCall(() -> {
 			    Shell sh= shell != null ? shell : JavaPlugin.getActiveWorkbenchShell();
-			    selected[0]= BuildPathDialogAccess.chooseContainerEntries(sh, project, entries);
+			    return BuildPathDialogAccess.chooseContainerEntries(sh, project, entries);
 			});
-		    if(selected[0] == null)
+		    if(selected == null) {
 		        return new IClasspathEntry[0];
-		    return selected[0];
+		    }
+		    return selected;
 		};
     }
 
@@ -554,22 +549,22 @@ public class ClasspathModifierQueries {
 
 			@Override
 			public boolean doQuery() {
-				final boolean[] isOK= {false};
-                Display.getDefault().syncExec(() -> {
+				return Display.getDefault().syncCall(() -> {
 				    Shell sh= shell != null ? shell : JavaPlugin.getActiveWorkbenchShell();
 
 				    NewFolderDialog dialog= new NewFolderDialog(sh, project.getProject());
-				    isOK[0]= dialog.open() == Window.OK;
-				    if (isOK[0]) {
+				    if (dialog.open() == Window.OK) {
 				    	IResource sourceContainer= (IResource) dialog.getResult()[0];
 				    	if (sourceContainer instanceof IFolder) {
 				    		fNewFolder= (IFolder)sourceContainer;
 				    	} else {
 				    		fNewFolder= null;
 				    	}
+				    	return true;
+				    } else {
+				    	return false;
 				    }
 				});
-                return isOK[0];
 			}
 
 
