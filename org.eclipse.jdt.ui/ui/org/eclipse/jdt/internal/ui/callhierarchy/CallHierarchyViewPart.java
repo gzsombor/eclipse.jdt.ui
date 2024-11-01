@@ -788,12 +788,10 @@ public class CallHierarchyViewPart extends ViewPart implements ICallHierarchyVie
     }
 
     private void methodSelectionChanged(ISelection selection) {
-        if (selection instanceof IStructuredSelection && ((IStructuredSelection) selection).size() == 1) {
-            Object selectedElement = ((IStructuredSelection) selection).getFirstElement();
+        if (selection instanceof IStructuredSelection structuredSelection && structuredSelection.size() == 1) {
+            Object selectedElement = structuredSelection.getFirstElement();
 
-            if (selectedElement instanceof MethodWrapper) {
-                MethodWrapper methodWrapper = (MethodWrapper) selectedElement;
-
+            if (selectedElement instanceof MethodWrapper methodWrapper) {
                 revealElementInEditor(methodWrapper, fCallHierarchyViewer);
                 updateLocationsView(methodWrapper);
             } else {
