@@ -32,6 +32,7 @@ public class FirstRunExecutionListener implements IListensToTestExecutions {
 	public void notifyTestEnded(ITestIdentifier test) {
 		sendMessage(test, MessageIds.TEST_END);
 		fSender.flush();
+		System.out.println("##Eclipse##JUnitRunner##testEnded##" + test.getUniqueId()); //$NON-NLS-1$
 	}
 
 	@Override
@@ -45,6 +46,7 @@ public class FirstRunExecutionListener implements IListensToTestExecutions {
 	public void notifyTestStarted(ITestIdentifier test) {
 		sendMessage(test, MessageIds.TEST_START);
 		fSender.flush();
+		System.out.println("##Eclipse##JUnitRunner##testStarted##" + test.getUniqueId()); //$NON-NLS-1$
 	}
 
 	private String getTestId(ITestIdentifier test) {
