@@ -674,9 +674,9 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 		@Override
 		public Image getImage(Object element) {
 			final var internal = getImageInternal(element);
-			if (element instanceof TypeNameMatch) {
+			if (element instanceof TypeNameMatch typeNameMatch) {
 				if (labelDecorator != null) {
-					final var type = ((TypeNameMatch) element).getType();
+					final var type = typeNameMatch.getType();
 					return labelDecorator.decorateImage(internal, type);
 				}
 			}
@@ -684,12 +684,12 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 		}
 
 		private Image getImageInternal(Object element) {
-			if (!(element instanceof TypeNameMatch)) {
+			if (!(element instanceof TypeNameMatch typeNameMatch)) {
 				return super.getImage(element);
 			}
-			ImageDescriptor contributedImageDescriptor= fTypeInfoUtil.getContributedImageDescriptor(element);
+			ImageDescriptor contributedImageDescriptor= fTypeInfoUtil.getContributedImageDescriptor(typeNameMatch);
 			if (contributedImageDescriptor == null) {
-				return TypeNameMatchLabelProvider.getImage((TypeNameMatch) element, TypeNameMatchLabelProvider.SHOW_TYPE_ONLY);
+				return TypeNameMatchLabelProvider.getImage(typeNameMatch, TypeNameMatchLabelProvider.SHOW_TYPE_ONLY);
 			} else {
 				return fImageManager.create(contributedImageDescriptor);
 			}
@@ -697,10 +697,10 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 
 		@Override
 		public String getText(Object element) {
-			if (!(element instanceof TypeNameMatch)) {
+			if (!(element instanceof TypeNameMatch typeNameMatch)) {
 				return super.getText(element);
 			}
-			return BasicElementLabels.getJavaElementName(fTypeInfoUtil.getFullyQualifiedText((TypeNameMatch) element));
+			return BasicElementLabels.getJavaElementName(fTypeInfoUtil.getFullyQualifiedText(typeNameMatch));
 		}
 
 		@Override
@@ -710,10 +710,10 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 
 		@Override
 		public String decorateText(String text, Object element) {
-			if (!(element instanceof TypeNameMatch)) {
+			if (!(element instanceof TypeNameMatch typeNameMatch)) {
 				return null;
 			}
-			return BasicElementLabels.getJavaElementName(fTypeInfoUtil.getFullyQualifiedText((TypeNameMatch) element));
+			return BasicElementLabels.getJavaElementName(fTypeInfoUtil.getFullyQualifiedText(typeNameMatch));
 		}
 
 		@Override
@@ -782,8 +782,8 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 
 		@Override
 		public Image getImage(Object element) {
-			if (element instanceof TypeNameMatch) {
-				return TypeNameMatchLabelProvider.getImage((TypeNameMatch) element, TypeNameMatchLabelProvider.SHOW_TYPE_CONTAINER_ONLY);
+			if (element instanceof TypeNameMatch typeNameMatch) {
+				return TypeNameMatchLabelProvider.getImage(typeNameMatch, TypeNameMatchLabelProvider.SHOW_TYPE_CONTAINER_ONLY);
 			}
 
 			return super.getImage(element);
@@ -791,8 +791,8 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 
 		@Override
 		public String getText(Object element) {
-			if (element instanceof TypeNameMatch) {
-				return BasicElementLabels.getJavaElementName(fTypeInfoUtil.getQualificationText((TypeNameMatch) element));
+			if (element instanceof TypeNameMatch typeNameMatch) {
+				return BasicElementLabels.getJavaElementName(fTypeInfoUtil.getQualificationText(typeNameMatch));
 			}
 
 			return super.getText(element);
@@ -877,8 +877,7 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 			return result.toString();
 		}
 
-		public ImageDescriptor getContributedImageDescriptor(Object element) {
-			TypeNameMatch type= (TypeNameMatch) element;
+		public ImageDescriptor getContributedImageDescriptor(TypeNameMatch type) {
 			if (fProviderExtension != null) {
 				fAdapter.setMatch(type);
 				return fProviderExtension.getImageDescriptor(fAdapter);
@@ -933,9 +932,8 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 
 		@Override
 		public boolean isSubFilter(ItemsFilter filter) {
-			if (! (filter instanceof TypeItemsFilter))
+			if (! (filter instanceof TypeItemsFilter typeItemsFilter))
 				return false;
-			TypeItemsFilter typeItemsFilter= (TypeItemsFilter) filter;
 			if (fMyTypeFilterVersion != typeItemsFilter.getMyTypeFilterVersion())
 				return false;
 
@@ -946,9 +944,8 @@ public class FilteredTypesSelectionDialog extends FilteredItemsSelectionDialog i
 
 		@Override
 		public boolean equalsFilter(ItemsFilter iFilter) {
-			if (!(iFilter instanceof TypeItemsFilter))
+			if (!(iFilter instanceof TypeItemsFilter typeItemsFilter))
 				return false;
-			TypeItemsFilter typeItemsFilter= (TypeItemsFilter) iFilter;
 			if (! getPattern().equals(typeItemsFilter.getPattern()))
 				return false;
 			if (getSearchScope() != typeItemsFilter.getSearchScope())
