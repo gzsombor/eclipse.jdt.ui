@@ -16,7 +16,9 @@ package org.eclipse.jdt.internal.ui.refactoring.reorg;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -44,6 +46,7 @@ import org.eclipse.jdt.internal.ui.JavaPlugin;
 public final class DestinationContentProvider extends StandardJavaElementContentProvider {
 
 	private IReorgDestinationValidator fValidator;
+	private Map<Object, Object[]> childrenMap = new WeakHashMap<>();
 
 	public DestinationContentProvider(IReorgDestinationValidator validator) {
 		super(true);
@@ -70,9 +73,14 @@ public final class DestinationContentProvider extends StandardJavaElementContent
 
 	@Override
 	public Object[] getChildren(Object element) {
+		Object[] cachedChildren = childrenMap.get(element);
+		if (cachedChildren != null) {
+			return cachedChildren;
+		}
 		try {
-			if (element instanceof IJavaModel) {
-				return concatenate(getJavaProjects((IJavaModel)element), getOpenNonJavaProjects((IJavaModel)element));
+			final Object[] filteredChildren;
+			if (element instanceof IJavaModel javaModel) {
+				filteredChildren =  concatenate(getJavaProjects(javaModel), getOpenNonJavaProjects(javaModel));
 			} else {
 				Object[] children= doGetChildren(element);
 				ArrayList<Object> result= new ArrayList<>(children.length);
@@ -82,8 +90,10 @@ public final class DestinationContentProvider extends StandardJavaElementContent
 						result.add(child);
 					}
 				}
-				return result.toArray();
+				filteredChildren = result.toArray();
 			}
+			childrenMap.put(element, filteredChildren);
+			return filteredChildren;
 		} catch (JavaModelException e) {
 			JavaPlugin.log(e);
 			return new Object[0];
@@ -91,8 +101,7 @@ public final class DestinationContentProvider extends StandardJavaElementContent
 	}
 
 	private Object[] doGetChildren(Object parentElement) {
-		if (parentElement instanceof IContainer) {
-			final IContainer container= (IContainer) parentElement;
+		if (parentElement instanceof IContainer container) {
 			return getResources(container);
 		}
 		return super.getChildren(parentElement);
