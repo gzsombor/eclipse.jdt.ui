@@ -14,8 +14,11 @@
 package org.eclipse.jdt.internal.ui.refactoring.reorg;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
@@ -44,6 +47,7 @@ import org.eclipse.jdt.internal.ui.JavaPlugin;
 public final class DestinationContentProvider extends StandardJavaElementContentProvider {
 
 	private IReorgDestinationValidator fValidator;
+	private final Map<IPath, Set<IPath>> classPathRoots = new HashMap<>();
 
 	public DestinationContentProvider(IReorgDestinationValidator validator) {
 		super(true);
@@ -71,8 +75,9 @@ public final class DestinationContentProvider extends StandardJavaElementContent
 	@Override
 	public Object[] getChildren(Object element) {
 		try {
-			if (element instanceof IJavaModel) {
-				return concatenate(getJavaProjects((IJavaModel)element), getOpenNonJavaProjects((IJavaModel)element));
+			final Object[] filteredChildren;
+			if (element instanceof IJavaModel javaModel) {
+				filteredChildren =  concatenate(getJavaProjects(javaModel), getOpenNonJavaProjects(javaModel));
 			} else {
 				Object[] children= doGetChildren(element);
 				ArrayList<Object> result= new ArrayList<>(children.length);
@@ -82,8 +87,9 @@ public final class DestinationContentProvider extends StandardJavaElementContent
 						result.add(child);
 					}
 				}
-				return result.toArray();
+				filteredChildren = result.toArray();
 			}
+			return filteredChildren;
 		} catch (JavaModelException e) {
 			JavaPlugin.log(e);
 			return new Object[0];
@@ -91,8 +97,7 @@ public final class DestinationContentProvider extends StandardJavaElementContent
 	}
 
 	private Object[] doGetChildren(Object parentElement) {
-		if (parentElement instanceof IContainer) {
-			final IContainer container= (IContainer) parentElement;
+		if (parentElement instanceof IContainer container) {
 			return getResources(container);
 		}
 		return super.getChildren(parentElement);
@@ -106,14 +111,8 @@ public final class DestinationContentProvider extends StandardJavaElementContent
 			if (javaProject == null || !javaProject.exists())
 				return members;
 			boolean isFolderOnClasspath = javaProject.isOnClasspath(container);
+			Set<IPath> classRootPaths= getClassPathRoots(javaProject);
 			List<IResource> nonJavaResources= new ArrayList<>();
-			Set<IPath> classRootPaths= new HashSet<>();
-			for (IPackageFragmentRoot classpathRoot : javaProject.getAllPackageFragmentRoots()) {
-				IPath classRootPath= classpathRoot.getPath();
-				if (classRootPath != null) {
-					classRootPaths.add(classRootPath);
-				}
-			}
 			// Can be on classpath but as a member of non-java resource folder
 			for (IResource member : members) {
 				// A resource can also be a java element
@@ -132,6 +131,24 @@ public final class DestinationContentProvider extends StandardJavaElementContent
 		} catch(CoreException e) {
 			return NO_CHILDREN;
 		}
+	}
+
+	private synchronized Set<IPath> getClassPathRoots(IJavaProject javaProject) {
+		return classPathRoots.computeIfAbsent(javaProject.getPath(), key -> {
+			Set<IPath> classRootPaths= new HashSet<>();
+			try {
+				for (IPackageFragmentRoot classpathRoot : javaProject.getAllPackageFragmentRoots()) {
+					IPath classRootPath= classpathRoot.getPath();
+					if (classRootPath != null) {
+						classRootPaths.add(classRootPath);
+					}
+				}
+				return classRootPaths;
+			} catch(JavaModelException e) {
+				// Nothing else to do, this was the original behavior too.
+				return Collections.emptySet();
+			}
+		});
 	}
 
 	private static Object[] getOpenNonJavaProjects(IJavaModel model) throws JavaModelException {
