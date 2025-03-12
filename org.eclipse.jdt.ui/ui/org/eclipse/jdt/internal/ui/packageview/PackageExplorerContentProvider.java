@@ -18,8 +18,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -96,7 +94,6 @@ public class PackageExplorerContentProvider extends StandardJavaElementContentPr
 
 	private UIJob fUpdateJob;
 
-	private final DeltaJob fdeltaJob;
 
 	/**
 	 * We use a cache to know whether a package has a single child for the hierarchical representation.
@@ -112,7 +109,6 @@ public class PackageExplorerContentProvider extends StandardJavaElementContentPr
 	 */
 	public PackageExplorerContentProvider(boolean provideMembers) {
 		super(provideMembers);
-		fdeltaJob= new DeltaJob();
 		fShowLibrariesNode= false;
 		fIsFlatLayout= false;
 		fFoldPackages= arePackagesFoldedInHierarchicalLayout();
@@ -134,8 +130,7 @@ public class PackageExplorerContentProvider extends StandardJavaElementContentPr
 	@Override
 	public void elementChanged(final ElementChangedEvent event) {
 		IJavaElementDelta delta= event.getDelta();
-		fdeltaJob.queue.add(delta);
-		fdeltaJob.schedule();
+		new DeltaJob(delta).schedule();
 	}
 
 	protected void processDelta(IJavaElementDelta delta) {
@@ -1020,11 +1015,12 @@ public class PackageExplorerContentProvider extends StandardJavaElementContentPr
 	}
 
 	private final class DeltaJob extends Job {
-		private Queue<IJavaElementDelta> queue= new ConcurrentLinkedQueue<>();
+		private final IJavaElementDelta delta;
 
-		DeltaJob() {
+		DeltaJob(IJavaElementDelta delta) {
 			super(PackagesMessages.PackageExplorerContentProvider_update_job_description);
 			setSystem(true);
+			this.delta = delta;
 		}
 
 		@Override
@@ -1034,11 +1030,7 @@ public class PackageExplorerContentProvider extends StandardJavaElementContentPr
 
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
-
-			IJavaElementDelta delta;
-			while ((delta= queue.poll()) != null) {
-				processDelta(delta);
-			}
+			processDelta(delta);
 			return Status.OK_STATUS;
 		}
 
