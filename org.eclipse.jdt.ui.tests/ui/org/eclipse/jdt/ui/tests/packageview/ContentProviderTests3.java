@@ -224,9 +224,12 @@ public class ContentProviderTests3{
 			@Override
 			public void run() {
 				try {
+					System.out.println("check jobs");
 					Job.getJobManager().join(PackageExplorerContentProvider.class, new NullProgressMonitor());
 				} catch (OperationCanceledException | InterruptedException e) {
+					e.printStackTrace();
 				}
+				System.out.println("latch countDown");
 				latch.countDown();
 			}
 		}).start();
@@ -237,6 +240,7 @@ public class ContentProviderTests3{
 				}
 			}
 		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
